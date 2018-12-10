@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 
 import RPi.GPIO as GPIO
-from time import sleep
+import time
+#from time import sleep
 
 #Disable warnings (optional)
 GPIO.setwarnings(False)
@@ -17,7 +18,9 @@ GPIO.setup(buzzer,GPIO.OUT)
 while True:
     GPIO.output(buzzer,GPIO.HIGH)
     print ("Beep")
-    sleep(0.5) # Delay in seconds
+    #sleep(0.5) # Delay in seconds
+    time.sleep(1/1000000.0)
     GPIO.output(buzzer,GPIO.LOW)
     print ("No Beep")
-    sleep(0.5)
+    #sleep(0.5)
+    time.sleep(1/1000000.0)
