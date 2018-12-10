@@ -8,6 +8,8 @@ import socket
 import os
 import time
 
+from datetime import datetime
+
 # Le as informacoes do endereco IP
 gw = os.popen("ip -4 route show default").read().split()
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -32,24 +34,23 @@ lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5,
                            lcd_d6, lcd_d7, lcd_colunas, lcd_linhas,
                            lcd_backlight)
 
+lcd.clear()
+
 # Imprime texto na primeira linha
-lcd.message('CDA CONTROL\n')
+lcd.set_cursor(3,0)
+lcd.message('CDA CONTROL')
 
 # Mostra o endereco IP na segunda linha
-lcd.message('IP %s' %(ipaddr))
+lcd.message('\nIP %s' %(ipaddr))
 
 # Aguarda 10 segundos
 time.sleep(10.0)
 
-# Scroll de texto esquerda/direita
+lcd.clear()
+lcd.set_cursor(3,0)
+lcd.message('CDA CONTROL')
+
 while True:
-        lcd.clear()
-        message = 'CDA CONTROL '
-        lcd.message(message)
-        lcd.message('\nRaspberry Pi')
-        for i in range(lcd_colunas-len(message)):
-                time.sleep(0.5)
-                lcd.move_right()
-        for i in range(lcd_colunas-len(message)):
-                time.sleep(0.5)
-                lcd.move_left()
+    lcd.set_cursor(0,1)
+    lcd.message(datetime.now().strftime(' %d/%m %H:%M:%S'))
+    time.sleep(0.5)
