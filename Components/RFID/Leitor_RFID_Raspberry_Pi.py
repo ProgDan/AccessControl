@@ -6,7 +6,7 @@ import MFRC522
 
 # UID dos cartões que possuem acesso liberado.
 CARTOES_LIBERADOS = {
-    '4F:FD:2F:0:9D': 'Master',
+    '72:8:6B:1F:E': 'Master',
     '3C:2F:4F:0:2D': 'Teste',
 }
 
@@ -37,11 +37,11 @@ try:
                 else:
                     print('Acesso Negado!')
  
-                print('nAproxime seu cartão RFID')
+                print('\nAproxime seu cartão RFID')
  
         time.sleep(.25)
 except KeyboardInterrupt:
     # Se o usuário precionar Ctrl + C
     # encerra o programa.
     GPIO.cleanup()
-    print('nPrograma encerrado.')
+    print('\nPrograma encerrado.')
