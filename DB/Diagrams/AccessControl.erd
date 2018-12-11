@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagram version="1" name="AccessControl.erd" time="201812111741">
+	<entities>
+		<data-source id="sqlite_jdbc-1679ea3392e-125896ec819c724">
+			<entity id="1" name="Usuario" fq-name="Usuario" order="0" x="298" y="174"/>
+			<entity id="2" name="Horario" fq-name="Horario" order="1" x="278" y="406"/>
+			<entity id="3" name="Movimento" fq-name="Movimento" order="2" x="47" y="70"/>
+		</data-source>
+	</entities>
+	<relations>
+		<relation name="FK_Horario_Usuario" fq-name="Horario.FK_Horario_Usuario" type="fk" pk-ref="1" fk-ref="2"/>
+	</relations>
+	<notes/>
+</diagram>
