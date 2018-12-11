@@ -115,12 +115,14 @@ test_melody = [
 #  notes['C4'], notes['G3'], notes['G3'],
 #  notes['A3'], notes['G3'], 0,
 #  notes['B3'], notes['C4']
-    notes['E4'],notes['C4']
+    notes['E7'], notes['E7'], 0, notes['E7'], notes['E7'],
+  0, notes['E7'], notes['E7']
 ]
 test_tempo = [
 #  4, 8, 8, 4,
 #  4, 4, 4, 4
-    3, 3
+    12, 12, 12, 12,
+  12, 12, 12, 12, 12
 ]
 
 
