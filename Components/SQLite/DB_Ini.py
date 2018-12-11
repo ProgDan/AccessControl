@@ -11,7 +11,7 @@ SQL_File_Name = "Table_Schema.sql"
 #Read Table Schema into a Variable and remove all New Line Chars
 TableSchema=""
 with open(SQL_File_Name, 'r') as SchemaFile:
- TableSchema=SchemaFile.read().replace('\n')
+ TableSchema=SchemaFile.read().replace('\n','')
 
 #Connect or Create DB File
 conn = sqlite3.connect(DB_NAME)
