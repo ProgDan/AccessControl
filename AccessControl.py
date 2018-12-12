@@ -40,24 +40,23 @@ lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5,
                            lcd_d6, lcd_d7, lcd_colunas, lcd_linhas,
                            lcd_backlight)
 
-lcd.clear()
-
-# Imprime texto na primeira linha
-lcd.set_cursor(3,0)
-lcd.message('CDA CONTROL')
-
-# Mostra o endereco IP na segunda linha
-lcd.message('\nIP %s' %(ipaddr))
-
-# Aguarda 10 segundos
-time.sleep(10.0)
-
-lcd.clear()
-lcd.set_cursor(3,0)
-lcd.message('CDA CONTROL')
-
 def setup():
     GPIO.setmode(GPIO.BCM)
+    lcd.clear()
+    
+    # Imprime texto na primeira linha
+    lcd.set_cursor(3,0)
+    lcd.message('CDA CONTROL')
+    
+    # Mostra o endereco IP na segunda linha
+    lcd.message('\nIP %s' %(ipaddr))
+    
+    # Aguarda 10 segundos
+    time.sleep(10.0)
+    
+    lcd.clear()
+    lcd.set_cursor(3,0)
+    lcd.message('CDA CONTROL')
 
 def destroy():
     GPIO.cleanup()
