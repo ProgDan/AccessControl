@@ -298,8 +298,8 @@ if __name__ == '__main__':      # Program start from here
                         print('Acesso Liberado!')
                         with conn:
                             usuario = select_usuario(conn, uid)
-                            usuario_nome = select_UsrNome(conn, usuario)
-                            movimento = (datetime.now(),uid,'P',0,0,0,usuario)
+                            usuario_nome = select_UsrNome(conn, usuario[0])
+                            movimento = (datetime.now(),uid,'P',0,0,0,int(usuario[0]))
                             gera_movimento(conn, movimento)
                         lcd.clear()
                         lcd.set_cursor(1,0)
