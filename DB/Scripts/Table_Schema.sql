@@ -22,6 +22,8 @@ CREATE TABLE Usuario (
 	UsrProvisorioValidade INTEGER
 );
 
+INSERT INTO Usuario (UsrCodigo, UsrNome, UsrBarra, UsrProvisorio, UsrProvisorioValidade) VALUES (5079,'Daniel', '72:8:6B:1F:E','',0);
+
 DROP TABLE IF EXISTS Horario;
 
 CREATE TABLE Horario (
