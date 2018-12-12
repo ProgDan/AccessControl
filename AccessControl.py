@@ -186,8 +186,8 @@ def setup():
     # Mostra o endereco IP na segunda linha
     lcd.message('\nIP %s' %(ipaddr))
     
-    # Aguarda 10 segundos
-    time.sleep(10.0)
+    # Aguarda 5 segundos
+    time.sleep(5.0)
     
     lcd.clear()
     lcd.set_cursor(3,0)
@@ -223,13 +223,23 @@ if __name__ == '__main__':      # Program start from here
                     # Se o cartão está liberado exibe mensagem de boas vindas.
                     if uid in CARTOES_LIBERADOS:
                         print('Acesso Liberado!')
+                        lcd.clear()
+                        lcd.set_cursor(1,0)
+                        lcd.message('Acesso Liberado')
+                        lcd.set_cursor(0,1)
+                        lcd.message(CARTOES_LIBERADOS[uid])
                         play(melody_win, tempo_win, 0.30, 0.800)
                         print('Olá %s.' % CARTOES_LIBERADOS[uid])
                     else:
                         print('Acesso Negado!')
+                        lcd.set_cursor(1,0)
+                        lcd.message('Nao Cadastrado')
                         play(melody_lost, tempo_lost, 0.30, 0.800)
                         
                     print('\nAproxime seu cartão RFID')
+                    lcd.clear()
+                    lcd.set_cursor(3,0)
+                    lcd.message('CDA CONTROL')
             
             lcd.set_cursor(0,1)
             lcd.message(datetime.now().strftime(' %d/%m %H:%M:%S'))
