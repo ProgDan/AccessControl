@@ -4,8 +4,17 @@ import Adafruit_CharLCD as LCD
 import socket
 import os
 import time
+import RPi.GPIO as GPIO
+import ./RFID/MFRC522
 
 from datetime import datetime
+
+# UID dos cartões que possuem acesso liberado.
+CARTOES_LIBERADOS = {
+    '72:8:6B:1F:E': 'Master',
+    '3C:2F:4F:0:2D': 'Teste',
+}
+
 
 # Le as informacoes do endereco IP
 gw = os.popen("ip -4 route show default").read().split()
@@ -50,14 +59,44 @@ lcd.message('CDA CONTROL')
 def setup():
 
 def destroy():
+    GPIO.cleanup()
+    print('\nPrograma encerrado.')
 
 if __name__ == '__main__':      # Program start from here
     try:
         setup()
         
-        lcd.set_cursor(0,1)
-        lcd.message(datetime.now().strftime(' %d/%m %H:%M:%S'))
-        time.sleep(0.5)
+        # Inicia o módulo RC522.
+        LeitorRFID = MFRC522.MFRC522()
+        
+        print('Aproxime seu cartão RFID')
+
+        while True:
+            # Verifica se existe uma tag próxima do módulo.
+            status, tag_type = LeitorRFID.MFRC522_Request(LeitorRFID.PICC_REQIDL)
+            
+            if status == LeitorRFID.MI_OK:
+                print('Cartão detectado!')
+                
+                # Efetua leitura do UID do cartão.
+                status, uid = LeitorRFID.MFRC522_Anticoll()
+                
+                if status == LeitorRFID.MI_OK:
+                    uid = ':'.join(['%X' % x for x in uid])
+                    print('UID do cartão: %s' % uid)
+                    
+                    # Se o cartão está liberado exibe mensagem de boas vindas.
+                    if uid in CARTOES_LIBERADOS:
+                        print('Acesso Liberado!')
+                        print('Olá %s.' % CARTOES_LIBERADOS[uid])
+                    else:
+                        print('Acesso Negado!')
+                        
+                    print('\nAproxime seu cartão RFID')
+            
+            lcd.set_cursor(0,1)
+            lcd.message(datetime.now().strftime(' %d/%m %H:%M:%S'))
+            time.sleep(.25)
 
         destroy()
     except KeyboardInterrupt:   # When 'Ctrl+C' is pressed, the child program destroy() will be  executed.
