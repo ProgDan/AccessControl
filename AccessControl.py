@@ -6,8 +6,16 @@ import os
 import time
 import RPi.GPIO as GPIO
 import RFID.MFRC522
+import sqlite3
 
 from datetime import datetime
+
+# DB Name
+DB_NAME = "./DB/access.db"
+
+#Connect or Create DB File
+conn = sqlite3.connect(DB_NAME)
+curs = conn.cursor()
 
 # UID dos cartões que possuem acesso liberado.
 CARTOES_LIBERADOS = {
@@ -145,7 +153,6 @@ tempo_lost = [
   12, 12
 ]
 
-
 def buzz(frequency, length):     #create the function "buzz" and feed it the pitch and duration)
 
     if(frequency==0):
@@ -195,6 +202,10 @@ def setup():
 
 def destroy():
     GPIO.cleanup()              # Release resource
+    # Close DB
+    curs.close()
+    conn.close()
+    
     print('\nPrograma encerrado.')
 
 if __name__ == '__main__':      # Program start from here
