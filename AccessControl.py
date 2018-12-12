@@ -163,6 +163,22 @@ def create_connection(db_file):
  
     return None
 
+def select_usuario(conn, uid):
+    """
+    Query usuario by uid
+    :param conn: the Connection object
+    :param uid:
+    :return: UsrCodigo
+    """
+    cur = conn.cursor()
+    cur.execute("SELECT UsrCodigo FROM Usuario WHERE UsrBarra=?", (uid,))
+ 
+    rows = cur.fetchall()
+ 
+    for row in rows:
+        return row
+
+
 def gera_movimento(conn, movimento):
     """
     Create a new movimento into the Movimento table
@@ -261,6 +277,8 @@ if __name__ == '__main__':      # Program start from here
                     if uid in CARTOES_LIBERADOS:
                         print('Acesso Liberado!')
                         with conn:
+                            usuario = select_usuario(conn, uid)
+                            print('Usuário: %s.' % usuario)
                             movimento = (datetime.now(),uid,'P',0,0,0,0)
                             gera_movimento(conn, movimento)
                         lcd.clear()
