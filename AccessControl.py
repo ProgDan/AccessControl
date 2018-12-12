@@ -123,6 +123,29 @@ tempo = [
   12
 ]
 
+melody_win = [
+  notes['A5'], notes['B5'], notes['C5'],
+  notes['B5'], notes['C5'], notes['D5'],
+  notes['C5'], notes['D5'], notes['E5'],
+  notes['D5'], notes['E5'], notes['E5']
+]
+tempo_win = [
+  12, 12, 12, 12,
+  12, 12, 12, 12,
+  12, 12, 12, 12,
+  12, 12, 12, 12
+]
+
+melody_lost = [
+  notes['G4'], notes['C4'], notes['G4'],
+  notes['C4'], notes['G4'], notes['C4']
+]
+tempo_lost = [
+  12, 12, 12, 12,
+  12, 12
+]
+
+
 def buzz(frequency, length):     #create the function "buzz" and feed it the pitch and duration)
 
     if(frequency==0):
@@ -200,10 +223,11 @@ if __name__ == '__main__':      # Program start from here
                     # Se o cartão está liberado exibe mensagem de boas vindas.
                     if uid in CARTOES_LIBERADOS:
                         print('Acesso Liberado!')
-                        play(melody, tempo, 0.30, 0.800)
+                        play(melody_win, tempo_win, 0.30, 0.800)
                         print('Olá %s.' % CARTOES_LIBERADOS[uid])
                     else:
                         print('Acesso Negado!')
+                        play(melody_lost, tempo_lost, 0.30, 0.800)
                         
                     print('\nAproxime seu cartão RFID')
             
