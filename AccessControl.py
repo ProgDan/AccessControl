@@ -177,6 +177,26 @@ def select_usuario(conn, uid):
  
     for row in rows:
         return row
+    
+    return None
+
+def select_UsrNome(conn, UsrCodigo):
+    """
+    Query UsrNome by UsrCodigo
+    :param conn: the Connection object
+    :param UsrCodigo:
+    :return: UsrNome
+    """
+    cur = conn.cursor()
+    cur.execute("SELECT UsrNome FROM Usuario WHERE UsrCodigo=?", (UsrCodigo,))
+ 
+    rows = cur.fetchall()
+ 
+    for row in rows:
+        return row
+    
+    return None
+
 
 
 def gera_movimento(conn, movimento):
@@ -278,8 +298,8 @@ if __name__ == '__main__':      # Program start from here
                         print('Acesso Liberado!')
                         with conn:
                             usuario = select_usuario(conn, uid)
-                            print('Usuário: %s.' % usuario)
-                            movimento = (datetime.now(),uid,'P',0,0,0,0)
+                            usuario_nome = select_UsrNome(conn, usuario)
+                            movimento = (datetime.now(),uid,'P',0,0,0,usuario)
                             gera_movimento(conn, movimento)
                         lcd.clear()
                         lcd.set_cursor(1,0)
@@ -287,7 +307,8 @@ if __name__ == '__main__':      # Program start from here
                         lcd.set_cursor(0,1)
                         lcd.message(CARTOES_LIBERADOS[uid])
                         play(melody_win, tempo_win, 0.30, 0.800)
-                        print('Olá %s.' % CARTOES_LIBERADOS[uid])
+                        #print('Olá %s.' % CARTOES_LIBERADOS[uid])
+                        print('Olá %s.' % usuario_nome)
                     else:
                         print('Acesso Negado!')
                         with conn:
