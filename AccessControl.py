@@ -260,19 +260,21 @@ if __name__ == '__main__':      # Program start from here
                     # Se o cartão está liberado exibe mensagem de boas vindas.
                     if uid in CARTOES_LIBERADOS:
                         print('Acesso Liberado!')
-                        movimento = (datetime.now(),uid,'P',0,0,0,(None,))
-                        gera_movimento(conn, movimento)
+                        with conn:
+                            movimento = (datetime.now(),uid,'P',0,0,0,0)
+                            gera_movimento(conn, movimento)
                         lcd.clear()
                         lcd.set_cursor(1,0)
                         lcd.message('Acesso Liberado')
                         lcd.set_cursor(0,1)
                         lcd.message(CARTOES_LIBERADOS[uid])
-                        with conn:
-                            
                         play(melody_win, tempo_win, 0.30, 0.800)
                         print('Olá %s.' % CARTOES_LIBERADOS[uid])
                     else:
                         print('Acesso Negado!')
+                        with conn:
+                            movimento = (datetime.now(),uid,'P',1,0,0,0)
+                            gera_movimento(conn, movimento)
                         lcd.set_cursor(1,0)
                         lcd.message('Nao Cadastrado')
                         play(melody_lost, tempo_lost, 0.30, 0.800)
