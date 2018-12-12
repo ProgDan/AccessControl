@@ -13,10 +13,6 @@ from datetime import datetime
 # DB Name
 DB_NAME = "./DB/access.db"
 
-#Connect or Create DB File
-conn = sqlite3.connect(DB_NAME)
-curs = conn.cursor()
-
 # UID dos cartões que possuem acesso liberado.
 CARTOES_LIBERADOS = {
     '72:8:6B:1F:E': 'Master',
@@ -153,6 +149,33 @@ tempo_lost = [
   12, 12
 ]
 
+def create_connection(db_file):
+    """ create a database connection to the SQLite database
+        specified by db_file
+    :param db_file: database file
+    :return: Connection object or None
+    """
+    try:
+        conn = sqlite3.connect(db_file)
+        return conn
+    except Error as e:
+        print(e)
+ 
+    return None
+
+def gera_movimento(conn, movimento):
+    """
+    Create a new movimento into the Movimento table
+    :param conn:
+    :param movimento:
+    :return: movimento id
+    """
+    sql = ''' INSERT INTO Movimento(MovData, MovBarra, MovSentido, MovBloqueado, MovForaHorario, MovProvisorio, UsrCodigo)
+              VALUES(?,?,?,?,?,?,?) '''
+    cur = conn.cursor()
+    cur.execute(sql, movimento)
+    return cur.lastrowid
+
 def buzz(frequency, length):     #create the function "buzz" and feed it the pitch and duration)
 
     if(frequency==0):
@@ -212,6 +235,9 @@ if __name__ == '__main__':      # Program start from here
     try:
         setup()
         
+        # create a database connection
+        conn = create_connection(DB_NAME)
+        
         # Inicia o módulo RC522.
         LeitorRFID = RFID.MFRC522.MFRC522()
         
@@ -234,11 +260,15 @@ if __name__ == '__main__':      # Program start from here
                     # Se o cartão está liberado exibe mensagem de boas vindas.
                     if uid in CARTOES_LIBERADOS:
                         print('Acesso Liberado!')
+                        movimento = (datetime.now(),uid,'P',0,0,0,(None,))
+                        gera_movimento(conn, movimento)
                         lcd.clear()
                         lcd.set_cursor(1,0)
                         lcd.message('Acesso Liberado')
                         lcd.set_cursor(0,1)
                         lcd.message(CARTOES_LIBERADOS[uid])
+                        with conn:
+                            
                         play(melody_win, tempo_win, 0.30, 0.800)
                         print('Olá %s.' % CARTOES_LIBERADOS[uid])
                     else:
