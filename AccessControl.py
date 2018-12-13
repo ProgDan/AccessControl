@@ -40,6 +40,9 @@ from datetime import datetime
 # DB Name
 DB_NAME = "./DB/access.db"
 
+# Pino Buzzer
+buzzer_pin = 4
+
 # Pinos LCD x Raspberry (GPIO)
 lcd_rs        = 18
 lcd_en        = 23
@@ -53,6 +56,10 @@ lcd_backlight = 4
 lcd_colunas = 16
 lcd_linhas  = 2
 ##############################################
+
+buzzer.notes()
+buzzer.melody_win()
+buzzer.melody_fail()
 
 # UID dos cartões que possuem acesso liberado.
 CARTOES_LIBERADOS = {
