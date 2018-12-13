@@ -60,6 +60,11 @@ lcd_linhas  = 2
 CARTOES_LIBERADOS = {
     '72:8:6B:1F:E': 'Master',
     '3C:2F:4F:0:2D': 'Teste',
+    'E:3:16:D3:C8': 'Blue 01',
+    'E7:5E:16:D3:7C': 'Blue 02',
+    '31:DF:92:EF:93': 'Blue 03',
+    '59:A5:8B:4C:3B': 'Blue 04',
+    'D9:A5:EA:4B:DD': 'Blue 05',
 }
 
 # Le as informacoes do endereco IP
