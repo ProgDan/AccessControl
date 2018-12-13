@@ -1,30 +1,43 @@
 #!/usr/bin/python3
+# -*- coding: utf8 -*-
+#
+#    Copyright 2018 Daniel Arndt Alves <progdan@gmail.com>
+#
+#    This file is part of AccessControl
+#    AccessControl is a simple Python implementation for
+#    the MFRC522 NFC Card Reader and Access Control System 
+#    for the Raspberry Pi.
+#
+#    AccessControl is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Lesser General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    AccessControl is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Lesser General Public License for more details.
+#
+#    You should have received a copy of the GNU Lesser General Public License
+#    along with AccessControl.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Programa: Rotina principal do controle de acesso
+# Ponto de entrada da aplicação
 
 import Adafruit_CharLCD as LCD
 import socket
 import os
 import time
 import RPi.GPIO as GPIO
-import RFID.MFRC522
 import sqlite3
+
+import RFID.MFRC522
 
 from datetime import datetime
 
+############### Settings ####################
 # DB Name
 DB_NAME = "./DB/access.db"
-
-# UID dos cartões que possuem acesso liberado.
-CARTOES_LIBERADOS = {
-    '72:8:6B:1F:E': 'Master',
-    '3C:2F:4F:0:2D': 'Teste',
-}
-
-
-# Le as informacoes do endereco IP
-gw = os.popen("ip -4 route show default").read().split()
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.connect((gw[2], 0))
-ipaddr = s.getsockname()[0]
 
 # Pino Buzzer
 buzzer_pin = 4
@@ -41,6 +54,19 @@ lcd_backlight = 4
 # Define numero de colunas e linhas do LCD
 lcd_colunas = 16
 lcd_linhas  = 2
+##############################################
+
+# UID dos cartões que possuem acesso liberado.
+CARTOES_LIBERADOS = {
+    '72:8:6B:1F:E': 'Master',
+    '3C:2F:4F:0:2D': 'Teste',
+}
+
+# Le as informacoes do endereco IP
+gw = os.popen("ip -4 route show default").read().split()
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.connect((gw[2], 0))
+ipaddr = s.getsockname()[0]
 
 # Inicializa o LCD nos pinos configurados acima
 lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5,
@@ -140,17 +166,17 @@ tempo_win = [
   12, 12, 12, 12
 ]
 
-melody_lost = [
+melody_fail = [
   notes['G4'], notes['C4'], notes['G4'],
   notes['C4'], notes['G4'], notes['C4']
 ]
-tempo_lost = [
+tempo_fail = [
   12, 12, 12, 12,
   12, 12
 ]
-
-def create_connection(db_file):
-    """ create a database connection to the SQLite database
+# Program start from here
+def create_connection(db_file):# Program start from here
+    """ create a database connection # Program start from hereto the SQLite database
         specified by db_file
     :param db_file: database file
     :return: Connection object or None
@@ -260,9 +286,9 @@ def setup():
     lcd.message('CDA CONTROL')
 
 def destroy():
-    GPIO.cleanup()              # Release resource
+    # Release resource
+    GPIO.cleanup()
     # Close DB
-    curs.close()
     conn.close()
     
     print('\nPrograma encerrado.')
@@ -316,7 +342,7 @@ if __name__ == '__main__':      # Program start from here
                             gera_movimento(conn, movimento)
                         lcd.set_cursor(1,0)
                         lcd.message('Nao Cadastrado')
-                        play(melody_lost, tempo_lost, 0.30, 0.800)
+                        play(melody_fail, tempo_fail, 0.30, 0.800)
                         
                     print('\nAproxime seu cartão RFID')
                     lcd.clear()
