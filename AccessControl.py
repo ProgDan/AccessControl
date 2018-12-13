@@ -31,7 +31,7 @@ import time
 import RPi.GPIO as GPIO
 import sqlite3
 
-import Buzzer.buzzer
+import Buzzer.buzzer as buzzer
 import RFID.MFRC522
 
 from datetime import datetime
@@ -60,15 +60,15 @@ lcd_linhas  = 2
 buzzer.notes()
 buzzer.melody_win()
 buzzer.melody_fail()
-
-# UID dos cartões que possuem acesso liberado.
-CARTOES_LIBERADOS = {
-    '72:8:6B:1F:E': 'Master',
-    '3C:2F:4F:0:2D': 'Teste',
-    'E:3:16:D3:C8': 'Blue 01',
-    'E7:5E:16:D3:7C': 'Blue 02',
-    '31:DF:92:EF:93': 'Blue 03',
-    '59:A5:8B:4C:3B': 'Blue 04',
+melody_fail()
+# UID dos cartões que possmelody_fail()uem acesso liberado.
+CARTOES_LIBERADOS = {melody_fail()
+    '72:8:6B:1F:E': 'Mastemelody_fail()r',
+    '3C:2F:4F:0:2D': 'Testmelody_fail()e',
+    'E:3:16:D3:C8': 'Blue melody_fail()01',
+    'E7:5E:16:D3:7C': 'Blumelody_fail()e 02',
+    '31:DF:92:EF:93': 'Blumelody_fail()e 03',
+    '59:A5:8B:4C:3B': 'Blumelody_fail()e 04',
     'D9:A5:EA:4B:DD': 'Blue 05',
 }
 
