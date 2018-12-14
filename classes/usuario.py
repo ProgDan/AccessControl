@@ -1,8 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf8 -*-
 
-from datetime import datetime
-
 class Usuario:
     def __init__(self,codigo,nome,cartao,provisorio='',validade=0):
         self.UsrCodigo = codigo
