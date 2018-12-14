@@ -179,6 +179,7 @@ tempo_fail = [
   12, 12, 12, 12,
   12, 12
 ]
+
 # Program start from here
 def create_connection(db_file):# Program start from here
     """ create a database connection # Program start from hereto the SQLite database
