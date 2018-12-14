@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 class Horario:
-    def __init__(self,dia,inicio,fim,sentido,usuario):
+    def __init__(self,dia=0,inicio='00:00',fim='23:59',sentido='B',usuario=0):
         self.HorDia = dia
         self.HorInicio = inicio
         self.HorFim = fim
