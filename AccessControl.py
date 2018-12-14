@@ -341,7 +341,7 @@ if __name__ == '__main__':      # Program start from here
                         lcd.message('Acesso Liberado')
                         lcd.set_cursor(0,1)
                         lcd.message(CARTOES_LIBERADOS[uid])
-                        play(melody_win, tempo_win, 0.30, 0.800)
+                        myBuzzer.play(melody_win, tempo_win, 0.30, 0.800)
                         #print('Olá %s.' % CARTOES_LIBERADOS[uid])
                         print('Olá %s.' % usuario_nome)
                     else:
@@ -351,7 +351,7 @@ if __name__ == '__main__':      # Program start from here
                             gera_movimento(conn, movimento)
                         lcd.set_cursor(1,0)
                         lcd.message('Nao Cadastrado')
-                        play(melody_fail, tempo_fail, 0.30, 0.800)
+                        myBuzzer.play(melody_fail, tempo_fail, 0.30, 0.800)
                         
                     print('\nAproxime seu cartão RFID')
                     lcd.clear()
