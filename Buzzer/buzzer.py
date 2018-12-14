@@ -4,7 +4,7 @@
 import time
 import RPi.GPIO as GPIO
 
-class Buzzer:
+class buzzer:
     def __init__(self,buzzer_pin):
         self.buzzer_pin = buzzer_pin
 
@@ -147,7 +147,7 @@ class Buzzer:
             
             noteDuration = pace/tempo[i]
             # Change the frequency along the song note
-            buzz(melody[i],noteDuration)
+            self.buzz(melody[i],noteDuration)
             
             pauseBetweenNotes = noteDuration * pause
             time.sleep(pauseBetweenNotes)

@@ -35,11 +35,14 @@ import RFID.MFRC522
 
 from datetime import datetime
 
+import Buzzer.buzzer as buzzer
+
 ############### Settings ####################
 # DB Name
 DB_NAME = "./DB/access.db"
 
 # Pino Buzzer
+myBuzzer = buzzer.buzzer(4)
 buzzer_pin = 4
 
 # Pinos LCD x Raspberry (GPIO)
