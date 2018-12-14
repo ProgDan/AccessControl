@@ -43,7 +43,6 @@ DB_NAME = "./DB/access.db"
 
 # Pino Buzzer
 myBuzzer = buzzer.buzzer(4)
-buzzer_pin = 4
 
 # Pinos LCD x Raspberry (GPIO)
 lcd_rs        = 18
@@ -147,8 +146,6 @@ def gera_movimento(conn, movimento):
 
 def setup():
     GPIO.setmode(GPIO.BCM)
-    GPIO.setup(buzzer_pin, GPIO.IN)
-    GPIO.setup(buzzer_pin, GPIO.OUT)
     
     lcd.clear()
     
