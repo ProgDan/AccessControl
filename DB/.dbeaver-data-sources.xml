@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data-sources>
 	<data-source id="sqlite_jdbc-1679ea3392e-125896ec819c724" provider="generic" driver="sqlite_jdbc" name="SQLite - access.db" save-password="true" show-system-objects="true" show-util-objects="true" read-only="false">
-		<connection server="" database="/home/progdan/Dropbox/documents/Development/AccessControl/DB/access.db" url="jdbc:sqlite:/home/progdan/Dropbox/documents/Development/AccessControl/DB/access.db" type="dev"/>
+		<connection server="" database="/Users/progdan/Dropbox/documents/Development/AccessControl/DB/access.db" url="jdbc:sqlite:/Users/progdan/Dropbox/documents/Development/AccessControl/DB/access.db" type="dev"/>
 	</data-source>
 	<filters/>
 </data-sources>

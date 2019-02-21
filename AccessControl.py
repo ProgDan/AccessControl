@@ -80,9 +80,9 @@ lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5,
                            lcd_d6, lcd_d7, lcd_colunas, lcd_linhas,
                            lcd_backlight)
 
-# Program start from here
-def create_connection(db_file):# Program start from here
-    """ create a database connection # Program start from hereto the SQLite database
+# Functions definitions
+def create_connection(db_file):
+    """ create a database connection # Program start from here to the SQLite database
         specified by db_file
     :param db_file: database file
     :return: Connection object or None
