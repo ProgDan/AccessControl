@@ -19,7 +19,8 @@ CREATE TABLE Usuario (
 	UsrNome TEXT NOT NULL,
 	UsrBarra TEXT,
 	UsrProvisorio TEXT,
-	UsrProvisorioValidade INTEGER
+	UsrProvisorioValidade INTEGER,
+	UsrValidacao INTEGER
 );
 
 INSERT INTO Usuario (UsrCodigo, UsrNome, UsrBarra, UsrProvisorio, UsrProvisorioValidade) VALUES (5079,'Daniel', '72:8:6B:1F:E','',0);
@@ -32,6 +33,7 @@ CREATE TABLE Horario (
 	HorInicio TEXT NOT NULL,
 	HorFim TEXT NOT NULL,
 	HorSentido TEXT NOT NULL,
+	HorValidacao INTEGER,
 	UsrCodigo INTEGER NOT NULL,
 	FOREIGN KEY(UsrCodigo) REFERENCES Usuario(UsrCodigo)
 );
