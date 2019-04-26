@@ -1,10 +1,19 @@
 #!/usr/bin/python3
 # -*- coding: utf8 -*-
+ 
+"""
+    Esta Classe representa um usuario em um banco de dados sqlite3.
+     
+    Banco de dados: '../DB/access.db'
+    Schema: '../DB/Scripts/Usr_Schema.sql'
+    Tabela: 'Usuario'
+"""
 
 import sqlite3
 import csv
 from Connect import Connect as Connect
 
+############### Settings ####################
 # DB Name
 DB_NAME = "./DB/access.db"
 
@@ -167,6 +176,39 @@ class UsrDb(object):
         self.db.commit_db()
     
     ''' UPDATE '''
-
-    # update_data
  
+    # update_data
+    def update_data(self, id):
+        try:
+            c = self.find_user(id)
+            if c:
+                self.UsrProvisorio = input('Código de barra provisório: ')
+                self.db.cursor.execute("""
+                UPDATE Usuario
+                SET UsrProvisorio = ?
+                WHERE UsrCodigo = ?
+                """, (self.UsrProvisorio, id,))
+                self.db.commit_db()
+                print("Dados atualizados com sucesso.")
+            else:
+                print('Não existe usuário com o código informado.')
+        except sqlite3.Error:
+            raise sqlite3.Error
+     
+ 
+    ''' DELETE '''
+ 
+    # delete_data
+    def delete_data(self, id):
+        try:
+            c = self.find_user(id)
+            if c:
+                self.db.cursor.execute("""
+                DELETE FROM Usuario WHERE UsrCodigo = ?
+                """, (id,))
+                self.db.commit_db()
+                print("Registro %d excluído com sucesso." % id)
+            else:
+                print('Não existe usuário com o código informado.')
+        except sqlite3.Error:
+            raise sqlite3.Error

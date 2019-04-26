@@ -1,6 +1,13 @@
 #!/usr/bin/python3
 # -*- coding: utf8 -*-
 
+"""
+    Esta classe gerencia um banco de dados sqlite3.
+     
+    Banco de dados: '../DB/access.db'
+    Schema: '../DB/Scripts/Usr_Schema.sql'
+"""
+
 import sqlite3
 
 class Connect(object):
