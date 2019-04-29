@@ -138,13 +138,13 @@ if __name__ == '__main__':
                     mov_db = MovDb(db)
                     hora_db = HorDb(db)
                     usrcartao = usuario_db.find_user_by_card(uid)
-                    if(not usrcartao.__eq__(None)):
+                    if(usrcartao.getUsrCodigo() != 0):
                         if(usrcartao.getUsrProvisorio() == uid):
                             print('Cartao Provisorio!')
                             # Verifica se o cartao provisorio esta vencido
-                            if(usrcartao.getUsrProvisorioValidade() < datetime.now()):
+                            if(usrcartao.getUsrProvisorioValidade() < datetime.now().timestamp()):
                                 print('Cartao Provisorio Vencido!')
-                                mov = Movimento(datetime.now(),uid,'P',1,0,1,usrcartao.getCodigo())
+                                mov = Movimento(datetime.now().timestamp(),uid,'P',1,0,1,usrcartao.getUsrCodigo())
                                 mov_db.insert_movimento(mov)
                                 lcd.set_cursor(1,0)
                                 lcd.message('Provis. Vencido')
@@ -152,9 +152,9 @@ if __name__ == '__main__':
                             else:
                                 print('Cartao Provisorio Valido!')
                                 # Verifica o horario de movimento
-                                if(hora_db.check_horario_by_user(usrcartao.getCodigo(), (datetime.today().weekday()+1)%7, datetime.now())):
+                                if(hora_db.check_horario_by_user(usrcartao.getUsrCodigo(), (datetime.today().weekday()+1)%7, datetime.now())):
                                     print('Acesso Liberado!')
-                                    mov = Movimento(datetime.now(),uid,'P',0,0,1,usrcartao.getCodigo())
+                                    mov = Movimento(datetime.now().timestamp(),uid,'P',0,0,1,usrcartao.getUsrCodigo())
                                     mov_db.insert_movimento(mov)
                                     lcd.set_cursor(1,0)
                                     lcd.message('Acesso Liberado')
@@ -163,19 +163,17 @@ if __name__ == '__main__':
                                     myBuzzer.play(myBuzzer.melody_win, myBuzzer.tempo_win, 0.30, 0.800)
                                 else:
                                     print('Fora de horario!')
-                                    mov = Movimento(datetime.now(),uid,'P',1,1,1,usrcartao.getCodigo())
+                                    mov = Movimento(datetime.now().timestamp(),uid,'P',1,1,1,usrcartao.getUsrCodigo())
                                     mov_db.insert_movimento(mov)
                                     lcd.set_cursor(1,0)
                                     lcd.message('Prov. Fora hor.')
                                     myBuzzer.play(myBuzzer.melody_fail, myBuzzer.tempo_fail, 0.30, 0.800)
                         else:
                             print('Cartao Pessoal!')
-                            mov = Movimento(datetime.now(),uid,'P',0,0,0,usrcartao.getCodigo())
-                            mov_db.insert_movimento(mov)
                             # Verifica o horario de movimento
-                            if(hora_db.check_horario_by_user(usrcartao.getCodigo(), (datetime.today().weekday()+1)%7, datetime.now())):
+                            if(hora_db.check_horario_by_user(usrcartao.getUsrCodigo(), (datetime.today().weekday()+1)%7, datetime.now())):
                                 print('Acesso Liberado!')
-                                mov = Movimento(datetime.now(),uid,'P',0,0,0,usrcartao.getCodigo())
+                                mov = Movimento(datetime.now().timestamp(),uid,'P',0,0,0,usrcartao.getUsrCodigo())
                                 mov_db.insert_movimento(mov)
                                 lcd.set_cursor(1,0)
                                 lcd.message('Acesso Liberado')
@@ -184,14 +182,14 @@ if __name__ == '__main__':
                                 myBuzzer.play(myBuzzer.melody_win, myBuzzer.tempo_win, 0.30, 0.800)
                             else:
                                 print('Fora de horario!')
-                                mov = Movimento(datetime.now(),uid,'P',1,1,0,usrcartao.getCodigo())
+                                mov = Movimento(datetime.now().timestamp(),uid,'P',1,1,0,usrcartao.getUsrCodigo())
                                 mov_db.insert_movimento(mov)
                                 lcd.set_cursor(1,0)
                                 lcd.message('Fora de horario')
                                 myBuzzer.play(myBuzzer.melody_fail, myBuzzer.tempo_fail, 0.30, 0.800)
                     else:
                         print('Nao Cadastrado!')
-                        mov = Movimento(datetime.now(),uid,'P',1,0,0,0)
+                        mov = Movimento(datetime.now().timestamp(),uid,'P',1,0,0,0)
                         mov_db.insert_movimento(mov)
                         lcd.set_cursor(1,0)
                         lcd.message('Nao Cadastrado')

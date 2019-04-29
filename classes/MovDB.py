@@ -12,8 +12,8 @@
 import sqlite3
 import csv
 from datetime import datetime
-import Connect as Connect
-import Movimento as Movimento
+from classes.Connect import Connect as Connect
+from classes.movimento import Movimento as Movimento
 
 ############### Settings ####################
 # DB Name
@@ -23,7 +23,7 @@ class MovDb(object):
     tb_name = 'Movimento'
     
     '''A classe MovDB representa um movimento no banco de dados.'''
-    def __init__(self,db = Connect(DB_NAME)):
+    def __init__(self,db):
         self.db = db
         self.tb_name
     
@@ -58,12 +58,14 @@ class MovDb(object):
             return False
     
     def insert_movimento(self, mov = Movimento()):
+        print(mov.getMovData(),mov.getMovBarra(),mov.getMovSentido(),mov.getMovBloqueado(),mov.getMovForaHorario(),
+                    mov.getMovProvisorio(),mov.getUsrCodigo())
         try:
             self.db.cursor.execute("""
             INSERT INTO Movimento (MovData, MovBarra, MovSentido, MovBloqueado, MovForaHorario, MovProvisorio, UsrCodigo)
             VALUES (?,?,?,?,?,?,?)
-            """, (mov.getMovData,mov.getMovBarra,mov.getMovSentido,mov.getMovBloqueado,mov.getMovForaHorario,
-                    mov.getMovProvisorio,mov.getUsrCodigo))
+            """, (mov.getMovData(),mov.getMovBarra(),mov.getMovSentido(),mov.getMovBloqueado(),mov.getMovForaHorario(),
+                    mov.getMovProvisorio(),mov.getUsrCodigo()))
             # commit to db
             self.db.commit_db()
             print("Movimento inserido com sucesso.")

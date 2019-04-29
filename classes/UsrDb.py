@@ -11,8 +11,8 @@
 
 import sqlite3
 import csv
-import Connect as Connect
-import Usuario as Usuario
+from classes.Connect import Connect as Connect
+from classes.usuario import Usuario as Usuario
 
 ############### Settings ####################
 # DB Name
@@ -22,7 +22,7 @@ class UsrDb(object):
     tb_name = 'Usuario'
     
     '''A classe UsrDB representa um usuário no banco de dados.'''
-    def __init__(self, db = Connect(DB_NAME)):
+    def __init__(self, db):
         self.db = db
         self.tb_name
     
@@ -170,8 +170,6 @@ class UsrDb(object):
                     'SELECT * FROM Usuario WHERE UsrBarra = ?',(card,))
                 usrdata = r.fetchone()
                 user = Usuario(usrdata[0],usrdata[1],usrdata[2],usrdata[3],usrdata[4])
-            else:
-                user = None
         return user
     
     # print user

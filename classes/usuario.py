@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 class Usuario:
-    def __init__(self,codigo,nome,cartao,provisorio='',validade=0):
+    def __init__(self,codigo=0,nome='',cartao='',provisorio='',validade=0):
         self.UsrCodigo = codigo
         self.UsrNome = nome
         self.UsrBarra = cartao

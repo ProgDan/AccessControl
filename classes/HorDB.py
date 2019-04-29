@@ -12,7 +12,8 @@
 import sqlite3
 import csv
 from datetime import datetime
-import Connect as Connect
+from datetime import timedelta
+from classes.Connect import Connect as Connect
 
 
 ############### Settings ####################
@@ -23,7 +24,7 @@ class HorDb(object):
     tb_name = 'Horario'
     
     '''A classe HorDB representa um horário no banco de dados.'''
-    def __init__(self, db = Connect(DB_NAME)):
+    def __init__(self, db):
         self.db = db
         self.tb_name
     
@@ -160,8 +161,8 @@ class HorDb(object):
             'SELECT * FROM Horario WHERE UsrCodigo = ? AND HorDia = ?',(id, day,))
         lista = r.fetchall()
         for row in lista:
-            ini = datetime.strptime(row[1],'%H:%M')
-            fim = datetime.strptime(row[2],'%H:%M')
+            ini = datetime.strptime(datetime.now().strftime('%Y-%m-%d') + ' ' + row[2],'%Y-%m-%d %H:%M')
+            fim = datetime.strptime(datetime.now().strftime('%Y-%m-%d') + ' ' + row[3],'%Y-%m-%d %H:%M')
             if(hora > ini and hora < fim):
                 return True
         return False
