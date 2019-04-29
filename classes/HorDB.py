@@ -11,7 +11,9 @@
 
 import sqlite3
 import csv
-from Connect import Connect as Connect
+from datetime import datetime
+import Connect as Connect
+
 
 ############### Settings ####################
 # DB Name
@@ -21,8 +23,8 @@ class HorDb(object):
     tb_name = 'Horario'
     
     '''A classe HorDB representa um horário no banco de dados.'''
-    def __init__(self):
-        self.db = Connect(DB_NAME)
+    def __init__(self, db = Connect(DB_NAME)):
+        self.db = db
         self.tb_name
     
     # create_schema
@@ -139,8 +141,8 @@ class HorDb(object):
         return r.fetchall()
     
     # print all users
-    def print_all_users(self):
-        lista = self.read_all_users()
+    def print_all_horarios(self):
+        lista = self.read_all_horarios()
         print('{:>3s} {:5s} {:5s} {:3s} {:3s} {:>3s}'.format(
               'dia', 'inicio', 'fim', 'sentido', 'validacao', 'usuario'))
         for c in lista:
@@ -153,6 +155,17 @@ class HorDb(object):
             'SELECT * FROM Horario WHERE UsrCodigo = ?',(id,))
         return r.fetchone()
     
+    def check_horario_by_user(self, id, day = (datetime.today().weekday()+1)%7, hora = datetime.now()):
+        r = self.db.cursor.execute(
+            'SELECT * FROM Horario WHERE UsrCodigo = ? AND HorDia = ?',(id, day,))
+        lista = r.fetchall()
+        for row in lista:
+            ini = datetime.strptime(row[1],'%H:%M')
+            fim = datetime.strptime(row[2],'%H:%M')
+            if(hora > ini and hora < fim):
+                return True
+        return False
+
     # print user
     def print_user(self,id):
         if self.find_user(id) == None:

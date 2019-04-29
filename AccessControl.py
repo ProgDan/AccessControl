@@ -37,9 +37,18 @@ from datetime import datetime
 
 import Buzzer.buzzer as buzzer
 
+from classes.Connect import Connect as Connect
+from classes.UsrDb import UsrDb as UsrDb
+from classes.MovDB import MovDb as MovDb
+from classes.HorDB import HorDb as HorDb
+from classes.usuario import Usuario as Usuario
+from classes.movimento import Movimento as Movimento
+from classes.horario import Horario as Horario
+
 ############### Settings ####################
 # DB Name
 DB_NAME = "./DB/access.db"
+
 
 # Pino Buzzer
 myBuzzer = buzzer.buzzer(4)
@@ -58,17 +67,6 @@ lcd_colunas = 16
 lcd_linhas  = 2
 ##############################################
 
-# UID dos cartões que possuem acesso liberado.
-CARTOES_LIBERADOS = {
-    '72:8:6B:1F:E': 'Master',
-    '3C:2F:4F:0:2D': 'Teste',
-    'E:3:16:D3:C8': 'Blue 01',
-    'E7:5E:16:D3:7C': 'Blue 02',
-    '31:DF:92:EF:93': 'Blue 03',
-    '59:A5:8B:4C:3B': 'Blue 04',
-    'D9:A5:EA:4B:DD': 'Blue 05',
-}
-
 # Le as informacoes do endereco IP
 gw = os.popen("ip -4 route show default").read().split()
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -81,69 +79,6 @@ lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5,
                            lcd_backlight)
 
 # Functions definitions
-def create_connection(db_file):
-    """ create a database connection # Program start from here to the SQLite database
-        specified by db_file
-    :param db_file: database file
-    :return: Connection object or None
-    """
-    try:
-        conn = sqlite3.connect(db_file)
-        return conn
-    except sqlite3.Error as e:
-        print(e)
- 
-    return None
-
-def select_usuario(conn, uid):
-    """
-    Query usuario by uid
-    :param conn: the Connection object
-    :param uid:
-    :return: UsrCodigo
-    """
-    cur = conn.cursor()
-    cur.execute("SELECT UsrCodigo FROM Usuario WHERE UsrBarra=?", (uid,))
- 
-    rows = cur.fetchall()
- 
-    for row in rows:
-        return row
-    
-    return None
-
-def select_UsrNome(conn, UsrCodigo):
-    """
-    Query UsrNome by UsrCodigo
-    :param conn: the Connection object
-    :param UsrCodigo:
-    :return: UsrNome
-    """
-    cur = conn.cursor()
-    cur.execute("SELECT UsrNome FROM Usuario WHERE UsrCodigo=?", (UsrCodigo,))
- 
-    rows = cur.fetchall()
- 
-    for row in rows:
-        return row
-    
-    return None
-
-
-
-def gera_movimento(conn, movimento):
-    """
-    Create a new movimento into the Movimento table
-    :param conn:
-    :param movimento:
-    :return: movimento id
-    """
-    sql = ''' INSERT INTO Movimento(MovData, MovBarra, MovSentido, MovBloqueado, MovForaHorario, MovProvisorio, UsrCodigo)
-              VALUES(?,?,?,?,?,?,?) '''
-    cur = conn.cursor()
-    cur.execute(sql, movimento)
-    return cur.lastrowid
-
 def setup():
     GPIO.setmode(GPIO.BCM)
     
@@ -167,7 +102,7 @@ def destroy():
     # Release resource
     GPIO.cleanup()
     # Close DB
-    conn.close()
+    db.close_db()
     
     print('\nPrograma encerrado.')
 
@@ -177,7 +112,7 @@ if __name__ == '__main__':
         setup()
         
         # create a database connection
-        conn = create_connection(DB_NAME)
+        db = Connect(DB_NAME)
         
         # Inicia o módulo RC522.
         LeitorRFID = RFID.MFRC522.MFRC522()
@@ -197,32 +132,71 @@ if __name__ == '__main__':
                 if status == LeitorRFID.MI_OK:
                     uid = ':'.join(['%X' % x for x in uid])
                     print('UID do cartão: %s' % uid)
-                    
-                    # Se o cartão está liberado exibe mensagem de boas vindas.
-                    if uid in CARTOES_LIBERADOS:
-                        print('Acesso Liberado!')
-                        with conn:
-                            usuario = select_usuario(conn, uid)
-                            usuario_nome = select_UsrNome(conn, usuario[0])
-                            movimento = (datetime.now(),uid,'P',0,0,0,int(usuario[0]))
-                            gera_movimento(conn, movimento)
-                        lcd.clear()
-                        lcd.set_cursor(1,0)
-                        lcd.message('Acesso Liberado')
-                        lcd.set_cursor(0,1)
-                        lcd.message(CARTOES_LIBERADOS[uid])
-                        myBuzzer.play(myBuzzer.melody_win, myBuzzer.tempo_win, 0.30, 0.800)
-                        #print('Olá %s.' % CARTOES_LIBERADOS[uid])
-                        print('Olá %s.' % usuario_nome)
+
+                    # Busca o cartão detectado no banco de dados
+                    usuario_db = UsrDb(db)
+                    mov_db = MovDb(db)
+                    hora_db = HorDb(db)
+                    usrcartao = usuario_db.find_user_by_card(uid)
+                    if(not usrcartao.__eq__(None)):
+                        if(usrcartao.getUsrProvisorio() == uid):
+                            print('Cartao Provisorio!')
+                            # Verifica se o cartao provisorio esta vencido
+                            if(usrcartao.getUsrProvisorioValidade() < datetime.now()):
+                                print('Cartao Provisorio Vencido!')
+                                mov = Movimento(datetime.now(),uid,'P',1,0,1,usrcartao.getCodigo())
+                                mov_db.insert_movimento(mov)
+                                lcd.set_cursor(1,0)
+                                lcd.message('Provis. Vencido')
+                                myBuzzer.play(myBuzzer.melody_fail, myBuzzer.tempo_fail, 0.30, 0.800)
+                            else:
+                                print('Cartao Provisorio Valido!')
+                                # Verifica o horario de movimento
+                                if(hora_db.check_horario_by_user(usrcartao.getCodigo(), (datetime.today().weekday()+1)%7, datetime.now())):
+                                    print('Acesso Liberado!')
+                                    mov = Movimento(datetime.now(),uid,'P',0,0,1,usrcartao.getCodigo())
+                                    mov_db.insert_movimento(mov)
+                                    lcd.set_cursor(1,0)
+                                    lcd.message('Acesso Liberado')
+                                    lcd.set_cursor(0,1)
+                                    lcd.message('Prov. Nome')
+                                    myBuzzer.play(myBuzzer.melody_win, myBuzzer.tempo_win, 0.30, 0.800)
+                                else:
+                                    print('Fora de horario!')
+                                    mov = Movimento(datetime.now(),uid,'P',1,1,1,usrcartao.getCodigo())
+                                    mov_db.insert_movimento(mov)
+                                    lcd.set_cursor(1,0)
+                                    lcd.message('Prov. Fora hor.')
+                                    myBuzzer.play(myBuzzer.melody_fail, myBuzzer.tempo_fail, 0.30, 0.800)
+                        else:
+                            print('Cartao Pessoal!')
+                            mov = Movimento(datetime.now(),uid,'P',0,0,0,usrcartao.getCodigo())
+                            mov_db.insert_movimento(mov)
+                            # Verifica o horario de movimento
+                            if(hora_db.check_horario_by_user(usrcartao.getCodigo(), (datetime.today().weekday()+1)%7, datetime.now())):
+                                print('Acesso Liberado!')
+                                mov = Movimento(datetime.now(),uid,'P',0,0,0,usrcartao.getCodigo())
+                                mov_db.insert_movimento(mov)
+                                lcd.set_cursor(1,0)
+                                lcd.message('Acesso Liberado')
+                                lcd.set_cursor(0,1)
+                                lcd.message('Nome do Usuario')
+                                myBuzzer.play(myBuzzer.melody_win, myBuzzer.tempo_win, 0.30, 0.800)
+                            else:
+                                print('Fora de horario!')
+                                mov = Movimento(datetime.now(),uid,'P',1,1,0,usrcartao.getCodigo())
+                                mov_db.insert_movimento(mov)
+                                lcd.set_cursor(1,0)
+                                lcd.message('Fora de horario')
+                                myBuzzer.play(myBuzzer.melody_fail, myBuzzer.tempo_fail, 0.30, 0.800)
                     else:
-                        print('Acesso Negado!')
-                        with conn:
-                            movimento = (datetime.now(),uid,'P',1,0,0,0)
-                            gera_movimento(conn, movimento)
+                        print('Nao Cadastrado!')
+                        mov = Movimento(datetime.now(),uid,'P',1,0,0,0)
+                        mov_db.insert_movimento(mov)
                         lcd.set_cursor(1,0)
                         lcd.message('Nao Cadastrado')
                         myBuzzer.play(myBuzzer.melody_fail, myBuzzer.tempo_fail, 0.30, 0.800)
-                        
+
                     print('\nAproxime seu cartão RFID')
                     lcd.clear()
                     lcd.set_cursor(3,0)

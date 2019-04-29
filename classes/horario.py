@@ -8,3 +8,18 @@ class Horario:
         self.HorFim = fim
         self.HorSentido = sentido
         self.UsrCodigo = usuario
+    
+    def getHorDia(self):
+        return self.HorDia
+    
+    def getHorInicio(self):
+        return self.HorInicio
+
+    def getHorFim(self):
+        return self.HorFim
+
+    def getHorSentido(self):
+        return self.HorSentido
+
+    def getUsrCodigo(self):
+        return self.UsrCodigo

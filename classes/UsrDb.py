@@ -11,7 +11,8 @@
 
 import sqlite3
 import csv
-from Connect import Connect as Connect
+import Connect as Connect
+import Usuario as Usuario
 
 ############### Settings ####################
 # DB Name
@@ -21,8 +22,8 @@ class UsrDb(object):
     tb_name = 'Usuario'
     
     '''A classe UsrDB representa um usuário no banco de dados.'''
-    def __init__(self):
-        self.db = Connect(DB_NAME)
+    def __init__(self, db = Connect(DB_NAME)):
+        self.db = db
         self.tb_name
     
     # create_schema
@@ -148,6 +149,30 @@ class UsrDb(object):
         r = self.db.cursor.execute(
             'SELECT * FROM Usuario WHERE UsrCodigo = ?',(id,))
         return r.fetchone()
+
+    # find user by card
+    def find_user_by_card(self, card):
+        user = Usuario()
+        r = self.db.cursor.execute(
+            'SELECT COUNT(*) FROM Usuario WHERE UsrBarra = ?',(card,))
+        if(r.fetchone()[0] > 0):
+            # instancia o usuario e devolve
+            r = self.db.cursor.execute(
+                'SELECT * FROM Usuario WHERE UsrBarra = ?',(card,))
+            usrdata = r.fetchone()
+            user = Usuario(usrdata[0],usrdata[1],usrdata[2],usrdata[3],usrdata[4])
+        else:
+            r = self.db.cursor.execute(
+                'SELECT COUNT(*) FROM Usuario WHERE UsrProvisorio = ?',(card,))
+            if(r.fetchone()[0] > 0):
+                # instancia o usuario e devolve
+                r = self.db.cursor.execute(
+                    'SELECT * FROM Usuario WHERE UsrBarra = ?',(card,))
+                usrdata = r.fetchone()
+                user = Usuario(usrdata[0],usrdata[1],usrdata[2],usrdata[3],usrdata[4])
+            else:
+                user = None
+        return user
     
     # print user
     def print_user(self,id):

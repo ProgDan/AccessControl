@@ -11,8 +11,9 @@
 
 import sqlite3
 import csv
-import time
-from Connect import Connect as Connect
+from datetime import datetime
+import Connect as Connect
+import Movimento as Movimento
 
 ############### Settings ####################
 # DB Name
@@ -22,8 +23,8 @@ class MovDb(object):
     tb_name = 'Movimento'
     
     '''A classe MovDB representa um movimento no banco de dados.'''
-    def __init__(self):
-        self.db = Connect(DB_NAME)
+    def __init__(self,db = Connect(DB_NAME)):
+        self.db = db
         self.tb_name
     
     # create_schema
@@ -55,6 +56,21 @@ class MovDb(object):
         except sqlite3.IntegrityError:
             print("Aviso: O movimento deve ser único.")
             return False
+    
+    def insert_movimento(self, mov = Movimento()):
+        try:
+            self.db.cursor.execute("""
+            INSERT INTO Movimento (MovData, MovBarra, MovSentido, MovBloqueado, MovForaHorario, MovProvisorio, UsrCodigo)
+            VALUES (?,?,?,?,?,?,?)
+            """, (mov.getMovData,mov.getMovBarra,mov.getMovSentido,mov.getMovBloqueado,mov.getMovForaHorario,
+                    mov.getMovProvisorio,mov.getUsrCodigo))
+            # commit to db
+            self.db.commit_db()
+            print("Movimento inserido com sucesso.")
+        except sqlite3.IntegrityError:
+            print("Aviso: O movimento deve ser único.")
+            return False
+
     
     # insert with list
     def insert_with_list(self):
@@ -109,7 +125,7 @@ class MovDb(object):
     # insert with parameter
     def insert_with_parameter(self):
         # solicitando os dados ao usuário
-        self.MovData = time.time()
+        self.MovData = datetime.now()
         self.MovBarra = input('Código de barra: ')
         self.MovSentido = input('Sentido solicitado: ')
         self.MovBloqueado = input('Movimento bloqueado: ')

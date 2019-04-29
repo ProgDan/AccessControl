@@ -11,3 +11,12 @@ class Usuario:
     
     def __str__(self):
         return self.UsrNome
+    
+    def getUsrProvisorio(self):
+        return self.UsrProvisorio
+    
+    def getUsrProvisorioValidade(self):
+        return self.UsrProvisorioValidade
+
+    def getUsrCodigo(self):
+        return self.UsrCodigo
