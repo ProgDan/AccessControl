@@ -1,0 +1,12 @@
+DROP TABLE IF EXISTS Horario;
+
+CREATE TABLE Horario (
+	HorID INTEGER PRIMARY KEY,
+	HorDia INTEGER NOT NULL,
+	HorInicio TEXT NOT NULL,
+	HorFim TEXT NOT NULL,
+	HorSentido TEXT NOT NULL,
+	HorValidacao INTEGER,
+	UsrCodigo INTEGER NOT NULL,
+	FOREIGN KEY(UsrCodigo) REFERENCES Usuario(UsrCodigo)
+);
