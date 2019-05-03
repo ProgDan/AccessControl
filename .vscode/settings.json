@@ -1,5 +1,5 @@
 {
-    "python.linting.pylintPath": "/usr/bin/pylint",
+    "python.linting.pylintPath": "/usr/local/bin/pylint",
     "python.pythonPath": "/usr/local/opt/python/bin/python3.7",
     "python.testing.pyTestPath": "/usr/bin/pytest-3",
     "python.linting.pylintEnabled": true,
