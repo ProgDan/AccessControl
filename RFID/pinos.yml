@@ -1,0 +1,158 @@
+2:  
+    gpio: 2
+    nome: SDA1_I2C
+    modo: OUT
+    estado: LOW
+    
+3:  
+    gpio: 3
+    nome: SCL1_I2C
+    modo: OUT
+    estado: LOW
+    
+4:  
+    gpio: 4
+    nome: GpioGen/GCLK
+    modo: OUT
+    estado: LOW
+    
+5:  
+    gpio: 5
+    nome: GpioGen
+    modo: OUT
+    estado: LOW
+    
+6:  
+    gpio: 6
+    nome: GpioGen
+    modo: OUT
+    estado: LOW
+    
+7:  
+    gpio: 7
+    nome: RFID-RC522 (Module 02) #SPI0_CE1_N
+    modo: OUT
+    estado: LOW
+    
+8:  
+    gpio: 8
+    nome: RFID-RC522 (Module 01) #SPI0_CE0_N
+    modo: OUT
+    estado: LOW
+    
+9:  
+    gpio: 9
+    nome: RFID-RC522 (Module 01/02) #SPI0_MISO
+    modo: OUT
+    estado: LOW
+    
+10: 
+    gpio: 10
+    nome: RFID-RC522 (Module 01/02) #SPI0_MOSI
+    modo: OUT
+    estado: LOW
+    
+11: 
+    gpio: 11
+    nome: RFID-RC522 (Module 01/02) #SPI0_SCLK
+    modo: OUT
+    estado: LOW
+    
+12: 
+    gpio: 12
+    nome: GpioGen
+    modo: IN
+    estado: LOW
+    resistor: PUD_DOWN
+    
+13: 
+    gpio: 13
+    nome: GpioGen
+    modo: IN
+    estado: LOW
+    resistor: PUD_DOWN
+    
+14: 
+    gpio: 14
+    nome: UART0_TXD
+    modo: OUT
+    estado: LOW
+    
+15: 
+    gpio: 15
+    nome: UART0_RXD
+    modo: OUT
+    estado: LOW
+    
+16: 
+    gpio: 16
+    nome: SPI1_CE2_N
+    modo: OUT
+    estado: LOW
+    
+17: 
+    gpio: 17
+    nome: SPI1_CE1_N
+    modo: OUT
+    estado: LOW
+    
+18: 
+    gpio: 18
+    nome: SPI1_CE0_N
+    modo: OUT
+    estado: LOW
+    
+19: 
+    gpio: 19
+    nome: SPI1_MISO
+    modo: OUT
+    estado: LOW
+    
+20: 
+    gpio: 20
+    nome: SPI1_MOSI
+    modo: OUT
+    estado: LOW
+    
+21: 
+    gpio: 21
+    nome: SPI1_SCLK
+    modo: OUT
+    estado: LOW
+    
+22: 
+    gpio: 22
+    nome: RFID-RC522 (Module 01)
+    modo: OUT
+    estado: LOW
+    
+23: 
+    gpio: 23
+    nome: GpioGen
+    modo: OUT
+    estado: LOW
+    
+24: 
+    gpio: 24
+    nome: GpioGen
+    modo: OUT
+    estado: LOW
+    
+25: 
+    gpio: 25
+    nome: GpioGen
+    modo: OUT
+    estado: LOW
+    
+26: 
+    gpio: 26
+    nome: GpioGen
+    modo: OUT
+    estado: LOW
+    
+27: 
+    gpio: 27
+    nome: RFID-RC522 (Module 02)
+    modo: OUT
+    estado: LOW
+    
