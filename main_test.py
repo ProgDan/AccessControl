@@ -5,7 +5,6 @@
 Class in Python 3.5 for testing two RFID readers with Raspberry Pi.
 
 Use: 
-$ cd TwoRC522RPi/
 $ sudo python run_main_test.py 
 Press Ctrl + C to finish.
 

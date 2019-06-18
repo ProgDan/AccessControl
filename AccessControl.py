@@ -45,6 +45,12 @@ from classes.usuario import Usuario as Usuario
 from classes.movimento import Movimento as Movimento
 from classes.horario import Horario as Horario
 
+__author__ = "Daniel Arndt Alves"
+__copyright__ = "Daniel Arndt Alves (2019)"
+__email__ = "progdan@gmail.com"
+__status__ = "Prototype"
+
+
 ############### Settings ####################
 # DB Name
 DB_NAME = "./DB/access.db"
